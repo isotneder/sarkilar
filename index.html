@@ -1,0 +1,2159 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dengbêj · Şarkı Sözleri</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #1a1410;
+    --surface: #231c16;
+    --surface2: #2d2318;
+    --border: #3d3028;
+    --accent: #c4853a;
+    --accent-dim: #8a5a22;
+    --text: #e8ddd0;
+    --text-muted: #8a7a6a;
+    --text-faint: #4a3f35;
+    --highlight: #f0c070;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+    flex: 1;
+  }
+
+  .logo span {
+    color: var(--text-muted);
+    font-size: 13px;
+    font-style: italic;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    display: block;
+    line-height: 1;
+    margin-top: 2px;
+  }
+
+  /* ── SEARCH ── */
+  .search-wrap {
+    padding: 14px 16px 10px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 68px;
+    z-index: 99;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 10px 14px 10px 38px;
+    outline: none;
+    transition: border-color .2s;
+  }
+
+  .search-wrap input::placeholder { color: var(--text-faint); }
+  .search-wrap input:focus { border-color: var(--accent-dim); }
+
+  .search-icon {
+    position: absolute;
+    left: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-faint);
+    pointer-events: none;
+    font-size: 15px;
+  }
+
+  .search-rel { position: relative; }
+
+  /* ── LANGUAGE TABS ── */
+  .lang-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 10px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 120px;
+    z-index: 98;
+  }
+
+  .lang-tabs::-webkit-scrollbar { display: none; }
+
+  .lang-tab {
+    flex-shrink: 0;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 14px;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+
+  .lang-tab.active, .lang-tab:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #1a1410;
+  }
+
+  /* ── SONG LIST ── */
+  .song-count {
+    padding: 10px 16px 6px;
+    font-size: 11px;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .song-list {
+    padding: 0 12px 120px;
+  }
+
+  .song-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background .15s;
+    border-bottom: 1px solid var(--text-faint);
+    border-bottom-color: #2a2018;
+  }
+
+  .song-item:hover, .song-item.active {
+    background: var(--surface2);
+  }
+
+  .song-item.active .song-title { color: var(--highlight); }
+
+  .song-num {
+    font-size: 11px;
+    color: var(--text-faint);
+    width: 22px;
+    text-align: right;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .song-info { flex: 1; min-width: 0; }
+
+  .song-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+  }
+
+  .song-lang {
+    font-size: 10px;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+
+  .song-arrow {
+    color: var(--text-faint);
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  /* ── LYRICS PANEL (slide-in) ── */
+  .lyrics-panel {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: 100%;
+    max-width: 600px;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    transform: translateX(100%);
+    transition: transform .3s cubic-bezier(.4,0,.2,1);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .lyrics-panel.open { transform: translateX(0); }
+
+  .panel-header {
+    padding: 18px 16px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .back-btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 18px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .panel-title-wrap { flex: 1; min-width: 0; }
+
+  .panel-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--highlight);
+    line-height: 1.2;
+  }
+
+  .panel-lang {
+    font-size: 11px;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+
+  .lyrics-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 20px 60px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .lyrics-body::-webkit-scrollbar { width: 4px; }
+  .lyrics-body::-webkit-scrollbar-track { background: transparent; }
+  .lyrics-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .lyrics-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    line-height: 2;
+    color: var(--text);
+    white-space: pre-wrap;
+  }
+
+  .lyrics-text .stanza {
+    margin-bottom: 1.6em;
+  }
+
+  /* ── OVERLAY ── */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    z-index: 199;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s;
+  }
+
+  .overlay.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* ── EMPTY ── */
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-faint);
+    font-size: 14px;
+  }
+
+  .empty-icon { font-size: 36px; margin-bottom: 12px; }
+
+  /* ── Tablet landscape: side-by-side ── */
+  @media (min-width: 768px) {
+    .layout {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .left-col {
+      width: 340px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+      border-right: 1px solid var(--border);
+    }
+
+    .right-col {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    header, .search-wrap, .lang-tabs {
+      position: static;
+    }
+
+    .list-scroll {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .lyrics-panel {
+      position: static;
+      transform: none !important;
+      max-width: none;
+      border-left: none;
+      background: var(--bg);
+    }
+
+    .lyrics-panel .panel-header .back-btn {
+      display: none;
+    }
+
+    .overlay { display: none !important; }
+
+    .welcome {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text-faint);
+      text-align: center;
+      padding: 40px;
+      gap: 12px;
+    }
+
+    .welcome-icon {
+      font-size: 48px;
+      margin-bottom: 8px;
+    }
+
+    .welcome h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .welcome p {
+      font-size: 13px;
+      line-height: 1.7;
+      max-width: 260px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .welcome { display: none; }
+    .right-col { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <!-- LEFT: LIST -->
+  <div class="left-col">
+    <header>
+      <div class="logo">
+        Dengbêj
+        <span>şarkı sözleri</span>
+      </div>
+    </header>
+
+    <div class="search-wrap">
+      <div class="search-rel">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Şarkı ara…" oninput="filterSongs()">
+      </div>
+    </div>
+
+    <div class="lang-tabs" id="langTabs">
+      <button class="lang-tab active" onclick="filterLang('all', this)">Tümü</button>
+      <button class="lang-tab" onclick="filterLang('Kürtçe', this)">Kürtçe</button>
+      <button class="lang-tab" onclick="filterLang('Türkçe', this)">Türkçe</button>
+      <button class="lang-tab" onclick="filterLang('Karma', this)">Karma</button>
+    </div>
+
+    <div class="song-count" id="songCount"></div>
+
+    <div class="list-scroll">
+      <div class="song-list" id="songList"></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: LYRICS -->
+  <div class="right-col">
+    <div class="welcome" id="welcomeMsg">
+      <div class="welcome-icon">🎵</div>
+      <h2>Bir şarkı seçin</h2>
+      <p>Sol taraftaki listeden bir şarkıya dokunun, sözler burada görünür.</p>
+    </div>
+    <div class="lyrics-panel" id="lyricsPanel">
+      <div class="panel-header">
+        <button class="back-btn" onclick="closePanel()">←</button>
+        <div class="panel-title-wrap">
+          <div class="panel-title" id="panelTitle">—</div>
+          <div class="panel-lang" id="panelLang"></div>
+        </div>
+      </div>
+      <div class="lyrics-body">
+        <div class="lyrics-text" id="lyricsText"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closePanel()"></div>
+
+<script>
+const songs = [
+  {
+    title: "Bitliste Beş Minare",
+    lang: "Türkçe",
+    lyrics: `Bitlis'te beş minare, beri gel oğlan beri gel.
+Yüreğim dolu yare, beri gel oğlan beri gel.
+İstedim yanan gelim, beri gel oğlan beri gel.
+Cebimde yok beş pare, beri gel oğlan beri gel…
+
+Tüfeğim dolu saçma, beri gel oğlan beri gel.
+Kaçma sevdiğim kaçma, beri gel oğlan beri gel.
+Doksan dokuz yarem var, beri gel oğlan beri gel.
+Bir yare de sen açma, beri gel oğlan beri gel…`
+  },
+  {
+    title: "Bare Evin",
+    lang: "Kürtçe",
+    lyrics: `Barê evîndarê sir e
+Eş û şewat e
+Dilê evîndara nazîk,
+Her bê tebat e
+
+Eywax li min, delala min
+Agir berdin bedena min
+Ji te hezkirî ev dilê min
+Girtî çavê min
+
+Çima carek dûr nenêrî
+Evîn nepirsî
+Mingo na, te go belê
+Guh ne`
+  },
+  {
+    title: "Oy Be Halım",
+    lang: "Kürtçe",
+    lyrics: `Oy ez helwektem, de bimrim
+Wek dayik bavik, de bimrim
+Wek ferat û kelat bûm, de were
+Hejane çave mino
+
+Oy deşt û zozan tev şîn bûn
+Heyv li ezman da geş dibû
+Keç û xortan dest dan hev, de rabin
+Benda te me were lo
+
+Oy bê halim
+Oy birîndarim
+Oy de were dilê mino
+Oy lawê delal
+Rabe delal bindestim
+De were canê mino
+
+Oy Şinda ketî, sebra min
+Tu pepûko jor, mala min
+Dixwînim didorim te, birîndarim
+Bê halim dilê mino`
+  },
+  {
+    title: "Adare",
+    lang: "Kürtçe",
+    lyrics: `Çûme serê çîyayê gabar
+Kulilk vebûn nexsa bihar
+êdî bes e zilma neyar
+Gelek xwes bû sahiya adar
+
+Adarê, xwes adarê, kulilka ber biharê
+Me ne zordestî, kevneperestî
+Me ne zilm û koledarî
+Adarê, xwes adarê, kulilka ber biharê
+
+Şervane li ser zinar û lat
+Dibezin ber bi roja felat
+Gelê me rabe roja nû hat
+Ew sehidên rewsa welat
+
+Li zindanan bi berxwedanî
+Çendî sehîd serî danî
+Standin dîroka tolanî
+Li ser çîyan ronî danî`
+  },
+  {
+    title: "Êvar e",
+    lang: "Kürtçe",
+    lyrics: `Êvar e ro dereng e
+Hara lila hara lila lila
+Sî xwar bû ser kereng e
+Hara lila hara lila hara lila lila
+Xulama bejna şeng e
+Hara lila hara lila hara lila lila
+
+Êvar e ro li esir
+Hara lila hara lila hara lila lila
+Sî xwar bû li ser kesir
+Hara lila hara lila hara lila lila
+Xulama çavên hêsir
+Hara lila hara lila hara lila lila
+
+Êvar e ro li ava
+Hara lila hara lila hara lila lila
+Sî xwar bû ser delava
+Hara lila hara lila hara lila lila
+Xulama bejn zirava
+Hara lila hara lila hara lila lila`
+  },
+  {
+    title: "Gewre Boze",
+    lang: "Kürtçe",
+    lyrics: `Gewrê bozê rindikê
+Çavresê çav belekê
+Gewrê bozê rindikê
+Çavreşê çav belekê
+
+Kewê çima dilezînî
+Benda kesî namînî
+Roniya rojê derewe
+Şevên li vir pir tarî ne
+
+Li çiya zinar ezmanan xînim
+Axa jindarî jê hilweşînim
+Ger bê wargeh bim ezê nemînim
+
+Li ber bayê zemanan
+Berî daye germiyanan
+
+Ka wer neçe lê dîne
+Çilê germa havînê
+Gelek mîna te çû bûn
+Mirin ne tu mizgînî
+
+Li çiya zinar ezmanan xînim
+Axa jindarî jê hilweşînim
+Ger bê wargeh bim ezê nemînim.`
+  },
+  {
+    title: "Sarê",
+    lang: "Kürtçe",
+    lyrics: `Sare rabe êvare marûmê rabe êvare
+Sarê rabê êvare zalime rabê êvare
+Kes li gundê me nema lê şûnda me dostû yara
+Kes li gundê me lê şunda me dost û yar e
+
+Sarê qîza xelkê ye lê dilê min jî ketiyê
+Marumê qîza xelkê ye lê dilê min jî ketiyê
+Sarê te ji bêriyê Marûmê tê ji beriye
+Herkes tî çû ber bêriyê herkes tî çû beriye
+
+Qurbana te zeriyê lê qurbana te zeriyê
+Evarê ro derenge lê sarê rabe êvare
+Êvarê ro derengê marumê rabe êvarê
+Sî ketî serkerenge le sarê rabe êvarê
+Keç rinde lo çelenge marumê haydê êvare
+Sarê tu sara minî marûmê tu sara minî`
+  },
+  {
+    title: "Söyleyemedim",
+    lang: "Türkçe",
+    lyrics: `Düşlerde sevdim seni, söyleyemedim
+Sessiz öptüm nefesini, söyleyemedim
+
+Sana ben şiirler sözler büyüttüm
+Sana ben baharlar yazlar büyüttüm
+Sana ben hummalı gizler büyüttüm
+Söyleyemedim
+
+Şarkılar yazdım sana, okuyamadım
+Şiirler yazdım sana, okuyamadım
+Hep yanımdaydın oysa, dokunamadım
+
+Sana ben şiirler sözler büyüttüm
+Sana ben baharlar yazlar büyüttüm
+Sana ben hummalı gizler büyüttüm
+Söyleyemedim`
+  },
+  {
+    title: "Telgrafın Tellerine",
+    lang: "Türkçe",
+    lyrics: `Telgrafın tellerine kuşlar mı konar?
+İnsan sevdiğine canım, böyle mi yanar?
+
+Yanıma gel, yanıma, otur şöyle yanıma
+Bu gençlikte neler geldi garip başıma
+
+Telgrafın tellerini arşınlamalı
+Yar üstüne yar seveni kurşunlamalı
+
+Yanıma gel, yanıma, otur hele yanıma
+Şu gençlikte neler geldi garip başıma`
+  },
+  {
+    title: "Diyarbakır Etrafında Bağlar Var",
+    lang: "Türkçe",
+    lyrics: `Hangi bağın bağbanısan gülüsen... gülüsen,
+Aldın aklım beni ettin deli sen aman.
+Kırk yıl kalsa yine kendi malımsan... malımsan,
+
+İsterem ki bir gün evvel gelesen aman.
+Öldüm bittim eridim kül oldum amman
+O senin aşkın elinden bayıldım amman
+
+Sesin aldım yüzünde gördüm ayıldım aman
+
+Diyarbakır etrafında bağlar var... Bağlar var,
+Fitil işler yüreğimde yaram var aman.
+Sen gidersen benim başka kimim var... Kimim var,
+
+İsterem ki bir gün evvel gelesen aman.`
+  },
+  {
+    title: "Ay Gewrê",
+    lang: "Kürtçe",
+    lyrics: `Carekê min dît ji xwe re gewrek
+Çavê wê reş û belek
+Xwe berda nav dilê min
+Min jê hezkirî gelek
+Ay gewrê ay gewrê ay gewrê gewra min
+
+Hat bîra min birî û çav
+Lêv û diranê li hev
+Bejn û bala teyê zirav
+Porê tarî weke şev
+Ay gewrê ay gewrê ay gewrê gewra min
+
+Ez û gewrê bûn dilek
+Bûne rihek bûn canek
+Tu car gewrê ji bîr nakim
+Ji niha û sed û salek
+Ay gewrê ay gewrê ay gewrê gewra min
+
+Nesîbê me tev rabû
+Ne b'destê min û te bû
+Xêrnexwaza em dûr xistin
+Lê dilê min li cem te bû
+Ay gewrê ay gewrê ay gewrê gewra min`
+  },
+  {
+    title: "Ay Lê Gulê",
+    lang: "Kürtçe",
+    lyrics: `Rengê te yê pir delalî
+Bilbil li ser te dinalî
+Te nebînim bi vî halî
+Armanc û kesera min î
+
+Ay lê Gulê Gula minê
+Şêrîna l'ber dilê minê
+Ez gul nadim bi malê dinê
+Li ser gulê têm kuştinê
+
+Gulê kesk û sor û zer e
+Nîşana alê li ser e
+Êdî reng sipî û gewher e
+Şêrîn û peymana minê`
+  },
+  {
+    title: "Hat Karwanê Helebê",
+    lang: "Kürtçe",
+    lyrics: `Hat karwanê helebê lê
+Hawar dilê dilê lê, dilê lê lê
+
+Danî li biniya medrebê lê
+Dimirim dilê dilê lê dilê dilê lê
+
+Te ez kuşt im helandim lê
+Hawar dilê dilê lê dilê lê lê
+
+Keçika mehla serebê lê
+Dimirim dilê dilê lê dilê dilê lê`
+  },
+  {
+    title: "Keçê Gulîyen Te",
+    lang: "Kürtçe",
+    lyrics: `Keçê gulîyen te sê ne
+Berxêm gulîyen te sê ne
+Her sê bi hev re radizênê
+
+Dilê min xem jê têne
+Keçê xulamê te me
+Evdalê ez kolê te me
+
+Hay lo dilo hay lo dilo dilka min
+Agir berda mala min,
+Şewitand goştê canê min
+
+Keçê gulîyen te çar in
+Berxêm gulîyen te çar in
+Her çar bi hev re heval in lê
+
+Xemê dilê min ez xwar im
+Keçê xulamê te me
+Evdalê ez kolê te me`
+  },
+  {
+    title: "Gesi Bağları",
+    lang: "Türkçe",
+    lyrics: `Gesi bağlarında dolanıyorum
+Yitirdim yârimi, aman aranıyorum
+
+Bir çift selamına güveniyorum
+Gel, otur yanıma, hallarımı söyley'im
+Halımdan bilmiyor, ben o yâri neyley'im?
+
+Gesi bağlarında üç top gülüm var
+Hey Allah'tan korkmaz, sana da, bana ölüm var
+
+Ölüm varsa bu dünyada zulüm var
+Atma garip anam beni dağlar ardına
+Kimseler yanmasın, anam yansın derdime`
+  },
+  {
+    title: "Sivas'ın Yollarına",
+    lang: "Türkçe",
+    lyrics: `Siyah Saçım Dolam Dolam
+Boynun Da Kurbanın Olam
+Eğer Başka Yer Seversen
+Bu Ellerde Nasıl Duram
+
+Sivas'ın Yollarına
+Çıkayım Dağlarına
+Bırak Ben Beni Vuram
+Ölüm Gitmez Zoruma
+
+Selvi Boylum Salında Gel
+Bir Bakışın Ömre Bedel
+İkimizi Ayırdılar
+Kör Olası Zalım Kader`
+  },
+  {
+    title: "Dostum Dostum",
+    lang: "Türkçe",
+    lyrics: `Bin cefalar etsen almam üstüme
+Gayet şirin geldi dillerin dostum
+Varıp yad ellere meyil verirsen
+Kış ola bağlana yolların dostum
+Dostum dostum dostum gelsene canım
+
+İlahi onmaya yardan ayıran
+Bahçede bülbüller ötüyor uyan
+Kula gölge ise Allah'a ayan
+Senden ayrılalı gülmedim dostum
+Dostum dostum dostum gelsene canım
+
+Pir Sultan Abdal'ım gülüm dermişler
+Bu şirin canıma nasıl kıymışlar
+İster isen dünya malı vermişler
+Sensiz dünya malı neylerim dostum
+Dostum dostum dostum gelsene canım`
+  },
+  {
+    title: "İşte Gidiyorum",
+    lang: "Türkçe",
+    lyrics: `İşte gidiyorum çeşm-i siyahım
+Önümüze dağlar sıralansa da, sıralansa da
+Sermayem derdimdir, servetim ahım
+Karardıkça bahtım karalansa da
+
+Haydi dolaşayım yüce dağlarda
+Dost beni bıraktı ah ile zarda, ah ile zarda
+Ötmek istiyorum viran bağlarda
+Ayağıma cennet kiralansa da
+
+Bağladım canımı zülfün teline
+Sen beni bıraktın elin diline, elin diline
+Güldün Mahzuni'nin berbat hâline
+Mervan'ın elinde parelense de`
+  },
+  {
+    title: "Zozan Zozan",
+    lang: "Kürtçe",
+    lyrics: `Zozan Zozan Zozan lê lê
+Zozan lê lê Zozan
+Zozan kewê canê
+
+Ref tê refê qazan lê lê
+Zozan lê lê Zozan
+Zozan kewê canê
+
+Firya serê gazan lê lê
+Zozan lê lê Zozan
+Zozan kewê canê
+
+Pezê Zozan reş e lê lê
+Zozan lê lê Zozan
+Zozan kewê canê
+
+Hûrik hûrik dimeşe lê lê
+Zozan lê lê Zozan
+Zozan kewê canê`
+  },
+  {
+    title: "Helîmê",
+    lang: "Kürtçe",
+    lyrics: `lê lê were were were were were were were
+lê wer helîmê
+lê lê keçikê dînê rebenê min got tu çi dixwaze li torakînê
+lê lê kubarê dînê rebenê xelkê tahl e
+lê li min şîrînê
+de were were lê wer helîmê
+
+lê lê helîm reben min got ez wa nakim
+lê ez wa nakim
+lê lê ez ê kirasê melesî kitan lê li xwe nakim
+lo lo mîro serê sîpanê xelatê berf û bagêr e ax li wê der nakim
+de were were lê wer helîmê
+
+lê lê helîm reben li taxa jorî tenûr dada
+lê lê helîm reben li taxa navê rihan av da
+lê lê rebbê alemê miradê min û helîma min
+hasil bike li nav doşek û lihêfê ax lê qedife da
+de were were lê wer helîmê`
+  },
+  {
+    title: "Mevziden Mevziye",
+    lang: "Türkçe",
+    lyrics: `Mevziden mevziye fırlayan canını savaşa adayan
+Yorgunluk açlık susuzluk demeden yılmadan savaşır gerilla
+Ha gerilla gerilla gerilla cihanın umudu gerilla
+Ha gerilla gerilla gerilla halkımın umudu gerilla
+
+Yer gök inim inim inler sabahın il ışıklarında
+Al kanlar içinde uzanmış göğsü paramparça gerilla
+
+Bizde canımızı adarız uğruna düştüğün davaya
+Her baktıkça kara namluya seni anacağız gerilla`
+  },
+  {
+    title: "Tûzik",
+    lang: "Kürtçe",
+    lyrics: `Tûzik li ser ava ye
+Av li binya mala ye
+Pîr nexweş e bela ye
+Tûzik dermanê dila ye
+
+Baranê rêşe rêşê
+Pîr nexweş e zaif diêşê
+Tûzik di dev de bigivêşe
+Tûzik dermanê dilêş e
+
+Rêya Tûzik ne dûr e
+Gola wê jî ne kûr e
+Tûzik Mendik, hê hûr e
+Dermane bêqisûr e
+
+Keçik çûne Tûzikê
+Xortan çûne Mendikê
+Dest avêtin Tûzikê
+Avê avêt navikê`
+  },
+  {
+    title: "Memyane",
+    lang: "Kürtçe",
+    lyrics: `Meyane memyane le le
+Memyane memyane
+Singe kew zozane
+
+Awa gelye kur tew le le
+Memyane memyane
+Ez we awe naxum le le
+
+Bina masiye hur tew le le
+Memyane memyane
+Singe kew zozane
+
+Awa gelye sar tew le le
+Memyane memyane
+Ez we awe naxum le le
+
+Bina masiye gîr tew le le
+Memyane memyane
+Singe kew zozane`
+  },
+  {
+    title: "Girê Sîra",
+    lang: "Kürtçe",
+    lyrics: `Girê sîra bi nîsk e, lê lê lê Meyro
+Gir xopanê bi nîsk e toliciwanê Meyro
+Wa siwara îske îske lê lê lê Meyro
+Xwestiyê Meyro babelîsk e toliciwanê Meyro
+
+Girê sîra bi sîr e, lê lê lê Meyro
+Gir xopanê bi sîr e toliciwanê Meyro
+Wa siwara hîre hîre, lê lê lê Meyro
+Xwestiyê Meyro wezîr e toliciwanê Meyro
+
+Girê sîra bi ce ye, lê lê lê Meyro
+Gir xopanê bi ce ye toliciwanê Meyro
+Wa siwara hey û heye, lê lê lê Meyro
+Xwestiyê Meyro file ye toliciwanê Meyro`
+  },
+  {
+    title: "Şev Çu",
+    lang: "Kürtçe",
+    lyrics: `Tenê hiştim ay dil îşev çima çû
+Wî ez kuştim ay dil îşev çima çû
+Rabe pey kev ay dil zû wê werîne
+Tez biriştim ay dil îşev çima çû
+
+Şev çû ma tu êdî hew têyî lo
+Ez ranazêm kengî bêyî te xew tê lo
+Xanî buye zîndan, tê de renazêm
+Tev seher qîr û nalîn tew tê lo
+
+Te ji min dil bir carek min ji ter nedgo na
+Te rû kûl kir carek min ji ter nedgo na
+Çima îro tu ji min xeyidî ye
+Te bi min çi dikir carek min ji ter nedgo na
+
+Dilê min jî te dixwazê bibîne
+Ti bi dûr ketî çavê min te nabîne
+Çima roja eşqa hevqa kin bûne
+Lê ev şîna dil jî her tim namîne`
+  },
+  {
+    title: "Çavreşê Min Dîtiye",
+    lang: "Kürtçe",
+    lyrics: `Çavreşê min dîtiye delalê
+Dixwazim wê bînim bûka malê
+
+Wext nêzîk bû ez ê herim balê
+Çavreş xwînşêrîn e, qîza malê
+
+Payîz nêz bû, dinya me çi xweş e
+Îsal daweta min û çavreş e
+
+Dewranek xweş e roj roja me ye
+Dilê me yek e, me çi ji xelkê ye
+
+Ax îsal daweta min û te ye
+Bi hev re bibin bûk û zava ye`
+  },
+  {
+    title: "Burçak Tarlası",
+    lang: "Türkçe",
+    lyrics: `Sabahtan kalktım da ezan sesi var
+Ezan da sesi değil yâr yâr, burçak yası var
+Bakın şu deyyusun kaç tarlası var
+
+Aman da kızlar ne zor imiş burçak yolması
+Burçak tarlasında yâr yâr, gelin olması
+Eğdirme fesini yavrum, kalkar giderim
+Evini başına yâr yâr, yıkar da giderim
+
+Elimi salladım, değdi dikene
+İnkisar eyledim yâr yâr, burçak ekene
+İlahi kaynana, ömrün tükene`
+  },
+  {
+    title: "Ez Berf Im",
+    lang: "Kürtçe",
+    lyrics: `Ez berf im, berf im, berf im
+Lêlê Nar, lêlê Nar
+Ez berf im, berf im, berf im
+Lêlê Nar, tu delal î
+
+Ez berfa çiyakî sor im
+Lêlê Nar, lêlê Nar
+Hemeyla dorbimor im
+Dosta lawikê por sor im
+
+Ez berf im, berf im, berf im
+Lêlê Nar, lêlê Nar
+
+Ez berfa çiyakî sipî me
+Hemeyla dorbendî me
+Dosta lawikê cindî me
+
+Ez berf im, berf im, berf im
+Lêlê Nar, lêlê Nar
+Lêlê Nar, tu delal î`
+  },
+  {
+    title: "Lê Bûkê",
+    lang: "Kürtçe",
+    lyrics: `Lê bûkê lê narê
+Bûka me bûkan e
+Tiriya nava rez e
+Zava da ber gez e
+
+Lê bûkê lê narê
+Bûka me diyar e
+Tiriyên ber dikan e
+Zava jê nexwar e
+
+Lê bûkê lê narê
+Bûka me bûkan e
+Bûka hez û mez e
+Bûka me bûka me`
+  },
+  {
+    title: "Zimanê Kurdî",
+    lang: "Kürtçe",
+    lyrics: `Bi xeml û rewş e
+Şêrîn û xweş e
+Zimanê kurdî
+Bi xweş awaz e
+Letîf û naz e
+Zimanê kurdî
+
+Beyta feqiyê
+Kubra xanîye
+Zimanê kurdî
+
+Kewkeb ciyane
+Kubra teyran e
+Zimanê kurdî`
+  },
+  {
+    title: "Berxwedan",
+    lang: "Kürtçe",
+    lyrics: `Girtiyên azadiyê di zindanê de wekî şêrekî birîndar
+Ku di qefesa xwe hilnayê
+Carê hêz da xwe û hate xwe
+Go Serhildan jiyan e, Berxwedan jiyan e
+
+Serhildan li serê çiyan hêy
+Berxwedan di nava zîndan
+Dengê xorta xweş tê min hele
+Dengê keçên dilovan
+
+Serhildan, berxwedan
+Serhildan jiyan e hêy hêy
+Berxwedan jiyan e
+
+Rawestin ne karê me ye
+Pêşveçûn armanca me ye
+Kurdistan li hêviya me ye
+Çavên wî li rêça me ye`
+  },
+  {
+    title: "Nergiz",
+    lang: "Kürtçe",
+    lyrics: `Hey Nergiz Nergiz Nergiz, Nergize nare ciwane,
+Hey Nergiz Nergiz Nergiz, sorgule berivane,
+
+Nergiza sere çiya, Nergize nare ciwane,
+Delal ü berf ü giya, sorgule berivane,
+
+Nergiza kofi berfin, Nergize nare ciwane,
+Me dil agir ü evin, sorgule berivane.`
+  },
+  {
+    title: "Çawreşamın",
+    lang: "Kürtçe",
+    lyrics: `Li pey te pir gerîyam
+Min te pirsî li her cîyan
+Wek kewa ser banîya
+Çavreşamin
+
+Çavreşamin were bamin
+Ez bêhalim tu sebebamin
+
+Tu pir nazik delalî
+Li nava vî dilî de
+Birînek bê dermanî
+Li vî canê de
+
+Min navê te bi xwîna xwe
+Nivîsande vî dilî
+Ne zimanên carekî
+Çavreşamin`
+  },
+  {
+    title: "Ava Hat û Ava Çû",
+    lang: "Kürtçe",
+    lyrics: `Ava hat û ava çû (Hewa hat û hewa çû)
+Siwar hat û peya çû
+Çavê min (li) çavê reş ket
+Aqil serde pê re çû oy
+
+Hele loy loy loy
+Kubar yarê esmerê loy
+
+Hoy hoy e hoy e hoy e
+Mala we li ber bûye
+Navê lawik nizanim
+Navê keçikê Eyşo ye oy
+
+Ber çem ber çem diçûme
+Benîştê xwe dicûme
+Dayê sûcê min çi ye?!
+Xelk (kur) aşiqê min bûye`
+  },
+  {
+    title: "Bahçada Yeşil Çınar",
+    lang: "Türkçe",
+    lyrics: `Bahçada yeşil çınar
+Boyun boyuma uyar
+Ben seni gizli sevdim
+Bilmedim âlem duyar
+
+Nanay gülüm, nananay top kaküllüm
+Nanay nanay esmer yârimsin nanay
+Nanay nanay kendi malımsın nanay
+
+Bahçada erik dalı
+Var git ellerin yâri
+Sen bana yâr olmazsın
+Yüzüme gülme bari`
+  },
+  {
+    title: "İki Dağın Arasında",
+    lang: "Türkçe",
+    lyrics: `İki dağın arasında kalmışam
+Bülbül kimin daldan dala konmuşam
+Ne gün görüp ne de mıraz almışam
+
+Ana beni bu zalımlar vurdular oy vurdular oy
+Vurdular da al kanlara koydular oy koydular oy
+
+Mezar arasında harman olur mu?
+Kama yarasına derman olur mu oy olur mu oy
+Osman'ı vuran da derman olur mu?
+
+Yıkılır mı hastahane binası
+Sağalır mı Genç Osman'ın yarası oy oy yarası oy
+Sende kama bende sevda yarası`
+  },
+  {
+    title: "Al Fadime'm",
+    lang: "Türkçe",
+    lyrics: `Evlerinin önü yoldur,
+Yolun sonu karakoldur,
+Kurban olam tatlı dille,
+Gel bizi bu dertten kurtar.
+
+Al Fadime'm bal Fadime'm,
+Yanakları gül Fadime'm,
+Gözleri var kömür gibi,
+Kaşları var keman gibi,
+Dudakları kiraz gibi,
+Al Fadime'm bal Fadime'm.
+
+Evlerinin önü kuyu,
+Kuyudan çekerler suyu,
+Ezelden bir âdetidir,
+Güzeli severler huyu.
+
+Evlerinin önü kaya,
+Kayadan bakarlar aya,
+Ben seni sevdim seveli,
+Gözüme gelmedi uyku.`
+  },
+  {
+    title: "Dilo Ez Bimrim",
+    lang: "Kürtçe",
+    lyrics: `Dilo ez bimrim dilo hawar li vê biharê
+Li vê biharê dilo hawar li vê biharê
+Tirbamin çêkin keko heyran li binya dare
+Mirin pir xweşe keko hawar li milkê bavê
+
+Dilo ez bimrim dilo qûrban li vê havînê
+Li vê havînê dilo heyran li vê havînê
+Tirbamin çêkin keko heyran li şan û şînê
+Mirin pir xweşe keko qûrban li gundê zîn'ê
+
+Dilo ez bimrim dilo hawar li vê payîzê
+Li vê payîzê dilo hawar li vê payîzê
+Tirbamin çêkin keko heyran bin dara gûzê
+Mirin pir xweşe keko hawar li milkê bavê`
+  },
+  {
+    title: "Ez Xelef Im",
+    lang: "Kürtçe",
+    lyrics: `ez xelef im xelef im
+hawar e mîr, hawar e mîr hawar e mîr
+êzdînşêr mîrê botan e
+xwedîyê şûrê bisedef im
+
+nav eşîran bigef im
+hawar e mîr, hawar e mîr hawar e mîr
+êzdînşêr mîrê botan e
+
+ez xelefê kinik im
+hawar e mîr, hawar e mîr hawar e mîr
+êzdînşêr mîrê botano
+xwedîyê şûrê bişirik im
+
+nav eşîran birik im
+hawar e mîr, hawar e mîr hawar e mîr
+êzdînşêr mîrê botano`
+  },
+  {
+    title: "Qumrike",
+    lang: "Kürtçe",
+    lyrics: `Qumrikê ez romî me, belê
+Delalê ez romî me
+
+Qumsor û efendî me, belê
+Xulam çavên reşbelek
+Eşqa keçika gundî me
+
+De yar yar yar, de yar yar yar
+De yar yar yar, de yar yar
+Bê te xewka min nayê
+
+Qumrika bi ser zinara, belê
+Delala bi ser zinara
+
+Kulîlka nava dara, belê
+Xulam çavên reşbelek
+Ketiye destê neyara`
+  },
+  {
+    title: "Darhejîrokê",
+    lang: "Kürtçe",
+    lyrics: `Hêjîra çiyayî
+Lêlêlê lêlê lêlê
+Delala çîyayî
+Darhejîrokê
+Xemrevînokê
+
+Nav gul û giyayî
+Lêlêlê lêlê lêlê
+Darhejîrokê
+
+Bûk dilê zava ye
+Lêlêlê lêlê lêlê
+Darhejîrokê
+
+Hejîra me reşe
+Lêlêlê lêlê lêlê
+Bûk çendî keleşe
+Zava yekî xweşe
+
+Hejîra latê ye
+Lêlêlê lêlê lêlê
+Ser bextê yarê ye
+Cizîr bin xetê ye`
+  },
+  {
+    title: "Hoy Nar Hoy Narê",
+    lang: "Kürtçe",
+    lyrics: `Gulê hoy nar hoy nar hoy narê
+Dînê hoy nar hoy nar hoy narê
+Gule min çavên belek xwarê
+Dînê min çavên belek xwarê
+
+Gulê sêva sor li guliyê darê
+Dînê sêva sor li guliyê darê
+Gulê ço davêm were jêrê
+Dinê ço davêm were jêrê
+
+Gulê tu qismeta vê carê
+Dinê tu qismeta vê carê
+Gulê ço davêm were xwarê
+Dînê ço davêm were xwarê`
+  },
+  {
+    title: "Zembilfiroş",
+    lang: "Kürtçe",
+    lyrics: `Zembîlfiroş zembîla tîne
+Delalo zembîla tîne
+Kolan bi kolan digerîne
+Nan û dahnê pê distîne
+Zarokan pê ditevrîne
+
+Gava ew zembîla tîne
+Xatûn li bircê dibîne
+Bi eşqa dil dihebîne
+Aqil diçe sewda namîne
+
+Ha dil were, ha dil were
+Kesê ji dil nekî bawere
+Ji mirovantî hatiye dere
+
+Xatûn:
+Kuro sêlka vir de bîne
+Mîr dixwaze te bibîne
+
+Zembîlfiroş:
+Xatûna min a delal e
+Min bîhîstî Mîr ne li mal e
+Bazara'm bi malê helal e
+Xatûnê ez tobedar im`
+  },
+  {
+    title: "Ez Dilgêşê Canım",
+    lang: "Kürtçe",
+    lyrics: `Ez dilgêşê can im
+Ji dozê re şivan im
+Saza minê kevnare
+Ez hîne yê bêzar im
+
+Ez dilgêşê can im
+Dengbêj im tembûrvan im
+Leşker im şoreşvan im
+Roja cengê ez şervan im
+
+Bi vî rengê nûjen
+Dil bi şadî, devken
+Li xan û eywanan
+Dixwînim xweşxwanan
+
+Roj û şevên şadî
+Wê bikin Kurd û Madî
+Kes nabe êdî Cegerxwîn
+Gişkê bêje çi xweş e jîn`
+  },
+  {
+    title: "Gulizer",
+    lang: "Kürtçe",
+    lyrics: `Dibêjin gul nexweş e wey gulîzeram
+Rebenê bi bextê reş e
+Wey gul wey gul wey gulîzer
+
+Derdêm yek bû bûne sedhezar
+Ez ji vî canê xwe bûme bezar
+
+Gula min gula zer e wey gulazerê
+Ber çavêm here û were
+Wey gul wey gul wey gulîzer
+
+Gula min bê evîn e wey gulevînê
+Ez bûm Mem ew bû Zînê
+Wey gul wey gul wey gulîzer
+
+Derdêm yek bû bûne sedhezar
+Ez ji vî canê xwe bûme bezar`
+  },
+  {
+    title: "Çu Çem",
+    lang: "Kürtçe",
+    lyrics: `Çu Çem çu çem ew çema li Ahmed Beg, çemkê ji Zаxokê,
+çu çem, ew çem ez qurbаnа çemkê ji Zaxokê,
+zerîyê li gundê me li Ahmed Beg, me şiyаnd Duhokê,
+yeke li gundê me li Ahmed Beg, mаmik kiçkokê.
+
+Çu çem, ew çemа li Ahmed Beg, çemkê ji Bаbîlê,
+zerîyê li gundê me li Ahmed Beg, me şiyаnd Erbîlê,
+yeke li gundê me li Ahmed Beg, mаmik hejîrê.
+
+Çu çem ew çemа li Ahmed Beg, çemkê ji Bаhzаnê,
+zeriyê li gundê me Ahmed Beg, me şiyаnd Seyrаnê,
+yeke li gundê me Ahmed Beg, mаmik fincаnê.`
+  },
+  {
+    title: "Koyverdun Gittun Beni",
+    lang: "Türkçe",
+    lyrics: `Koyverdun gittun beni
+Allah'ından bulasun oy
+Kimse almasun seni
+Gene bana kalasun
+
+Gelevera deresi oy
+İki dağın arası
+Yüzünden silinmesun oy
+Bıçağumin yarası
+
+Sevgilim senin aşkın
+Ciğerlerimi dağlar
+Hiç mi düşünmedin sen
+Sevgilin böyle ağlar
+
+Bir mektup gönder bana
+Cebimde taşıyayım
+Sensiz yalan dünyada
+Ben nasıl yaşıyorum`
+  },
+  {
+    title: "Gelmiş Bahar",
+    lang: "Karma",
+    lyrics: `Gelmiş bahar, geçmiş yazlar, neyleyeyim?
+Dinleyin derdimi dağlar, söyleyeyim
+
+O yârdan bir haber verin
+Öleyim, valla valla
+Öleyim, billa billa
+
+Hat havîna gundê me, lê, wextê reza
+Min digot şevê, digo, lê lê, di nav peza
+
+Ez ê te birevînim, lê
+Şewq da reza were were
+Lê dîlberê, were were
+Lê esmerê, were were
+
+Hâlim çok perişan, bağrım yaralı
+Bu dünyada bir yâr sevdim, el aldı
+
+Konuşacak bir tek dostum
+Kalmadı, valla valla`
+  },
+  {
+    title: "Sallana Sallana",
+    lang: "Karma",
+    lyrics: `Sallana sallana meçe ser ave
+Yıkamış esbabı raxi ber tave
+Bir öpücük isterem xera dew u bawe
+
+Yabancı değilem kure xale temme
+Dı beji na beji hewala temme
+
+Evimi sorarsan nezika mala te ye
+Keyfimi sorarsan keyfim hale te ye
+Aslımı sorarsan kure ape te ye
+
+Salını salını tu ji virda hati
+Aşkın ateşinden dile min keti
+Dilber söz vermiştin tu çıma nati
+
+Yeki Tirki bibejim dudu Kurmanci
+Yanağı gırmızı seva nar inci`
+  },
+  {
+    title: "Ax û Eman",
+    lang: "Kürtçe",
+    lyrics: `Ax û eman, êş û derdê vê dinyayê
+Çendî ez kuştim
+Çendî ez kirime vê belayê
+
+Çi dinyake pûç û vala
+Ax eman, eman eman
+
+Brîndar kirim
+Ez pîr kirim vê zeriyê
+Hişê min dibir
+Gava ew çû wê bêriyê
+
+Ne silavek ne dinêrî
+Ax eman, eman eman
+
+Evîndar im
+Dîtina te ji min re keder e
+Hêvîdar im
+Dilê min tu bibî ji xwe re
+Bêje were derman ji te re`
+  },
+  {
+    title: "Divane Aşuk Gibi",
+    lang: "Türkçe",
+    lyrics: `Divane aşuk gibi da yar dolaşırım yollarda
+Kız senun sebebune
+Kaldım istanbullarda
+
+Baban beni Babandanda bir kerecik istesin.
+Allahin emri ile
+Gelinim olsun desin
+
+Sar belune belune da karadeniz kuşağı
+E kız sende delisun
+Alsam hapu uşağu
+
+Yüksek dağun kuşiyum da selviye konacağum
+İste beni babamdan iste beni anamdan
+Vermezse kaçacağım
+
+Al şalum yeşil şalum da dağlaru dolaşalum
+Sen yağmur ol ben bulut
+Maçkada buluşalum`
+  },
+  {
+    title: "Denizde Karartı Var",
+    lang: "Türkçe",
+    lyrics: `Denizde kararti var bu gelen kayik midur
+Ben özledum yarumi ağlasam ayip midur
+
+Oy dumanlar dumanlar hep dağları sardunuz
+Yüreğumun derdine bilsenuz ağlardunuz
+
+Karardi Karadeniz taşdi bu yana taşdi
+Haber verun yarume gözlerum doldu taşdi
+
+Gemi mil ile olur sevda dil ilen olur
+Güzeller çok var ama meil birine olur`
+  },
+  {
+    title: "Başındaki Yazmayı",
+    lang: "Türkçe",
+    lyrics: `Başındaki yazmayı da
+Sarıya mı boyadın
+Neden sararıp soldun da
+Sevdaya mı uğradın
+
+Tokat'tan mı geliyon da
+Yar sen Almuslu musun
+Ben sana varacağım da
+Söyle namuslu musun
+
+İçliğinin yakası da
+Sıra sıra nakış yar
+Gurban olam boyuna da
+O ne biçim bakış yar
+
+Yola yolladım seni de
+Yollar yollasın seni
+Hızır elinden tutsun da
+Bana yollasın seni`
+  },
+  {
+    title: "Ay Dilberê",
+    lang: "Kürtçe",
+    lyrics: `Li baxê min bû zivistan
+Ay dîlberê dem gulîstan
+Çilmisî gul, bax û bostan
+Wêran ezim malêm xirab
+Ay dîlberê ne menale
+
+Feqîyê Teyran êdî kal e
+Nexweşekî pir bêhal e
+
+Tu him gul î him rihan î
+Tu him derd î him derman î
+Him hekîm î him loqman î
+
+Ax dilberê de tu zanî
+Kulîlk vebûn li çîya û banî
+Bilbil pirskir Feqî kanê
+
+Sibhan ji navê te ra tene
+Xalek ji xala gerdenê
+Te ez dîn kirim beram dinê`
+  },
+  {
+    title: "Batman e Batman e",
+    lang: "Kürtçe",
+    lyrics: `Batman e Batman e
+Lêb lê Gulê, Lêb lê Gulê lê lê
+Sîng sedefê, dev biçûkê, çav belekê 'enî gewherê canê
+Batmana Kurda ye
+
+Ûrmiye Ûrmiye
+Lêb lê Gulê, Lêb lê Gulê lê lê
+Temam gul û bî ye
+Sîng sedefê, dev biçûkê, çav belekê 'enî gewherê canê
+
+Petrol e petrol e
+Lêb lê Gulê, Lêb lê Gulê lê lê
+Petrola Kurda ye
+Sîng sedefê, dev biçûkê, çav belekê 'enî gewherê canê
+
+Batmana mêran e
+Lêb lê Gulê, Lêb lê Gulê lê lê
+Hemû wek şêran e
+Gula Kurdistan e`
+  },
+  {
+    title: "Şêrînamin",
+    lang: "Kürtçe",
+    lyrics: `Şêrînamin were bamin
+Şêrîna min wez bê halim were bamin
+Ku tu ji min bawer nakî nayî dîtina min
+Piştî ez mirim tu qet neke şîna min
+
+Çavreşamin çare nîne
+Çavreşamin nav û cergêm tev bi xwîn e
+Sebebamin ev dila bo te evîn e
+
+Şêrînamin çavreşamin, delalamin
+Şiyarim bê te xew nayê
+Hêsirên çavê'm tê xar, dawî lê nayê
+Te min kir hat û dînek berdam dinyayê`
+  },
+  {
+    title: "Gulamin Cizîr a Botan ê",
+    lang: "Kürtçe",
+    lyrics: `Gulamin cizîr a botan ê
+Kulîlka nav Kurdistan ê
+Gulamin gul a Mêrdîn ê
+Serhildana nisêbîn ê
+
+Gundîno werin dilan ê
+Bi govend û serhildan ê
+Roj hilatiye li Kurdistan ê
+Şewqa xwe daye cîhan ê
+
+Hêviya karkerê Kurdistan
+Wê xilaske mij û boran
+Keç û xort tev dayikan e
+Berê xwe dan serhildan ê
+
+Amed Bazîd Kerboran e
+Îro wan serî hildan e
+Sibê temam Kurdistan e`
+  },
+  {
+    title: "Canda",
+    lang: "Kürtçe",
+    lyrics: `Canda, tu gul ba biçanda
+Te sozek wê roja han da
+Şev çû canê tu nehatî
+Ez mam heya mele bang da
+
+Tirsim ya dil bêjim hîna,
+ew dil lo li ba min tina
+Tiştê bi serê min hatina
+Him ditirsim him newêrim
+
+Canda, can bi te dispêrim
+Têr nabim çendî binêrim
+Te divêm û nikarim bêjim
+Te di nava dil da vedişêrim
+
+Sê sal mi dil da hilanî
+Te dil ji navam deranî
+Herkes li gundê me dizanî
+Ku sê sal ez li benda te mam`
+  },
+  {
+    title: "Gelo Bê Ka Ew Kî Bû",
+    lang: "Kürtçe",
+    lyrics: `Yek daket ji birca belek
+Horî perî çav belek
+Keziyê reş porê xelek
+Me hej mekar kir gelek
+
+Gelo bê ka ew kî bû
+Nebê yeke Botî bû
+Yan yeke Amedî bû
+Yan jî ew Serhedî bû
+Na wella Batmanî bû
+
+Şox û şeng hat binaze
+Bi evîn û dilxwaze
+Bûye teyreke baze
+Nizanim çi dixwaze`
+  },
+  {
+    title: "Ay Lo Dılo",
+    lang: "Kürtçe",
+    lyrics: `Ma shin warê heseni
+Ay lo dılo lo dılo
+Penera sera seri
+Ismo dılo delilo
+Qomê ma ha pêseri
+
+Ay lo dılo lo dılo
+Ay lo dılo lo dılo
+Ismo dılo delilo
+
+Sêr sıbayê honıko
+Ay lo dılo lo dılo
+Keyno mast kerd kodıko
+Nono korek pedı ko
+Ismo dılo delilo`
+  },
+  {
+    title: "Herne Peş",
+    lang: "Kürtçe",
+    lyrics: `Birayên delal hun werin kurdino
+Bihişta welat em herin merdino
+Eger hun nayên vane keç em meşin
+Bese koletî serfiraz her bijîn
+
+Herne peş herne peş dewr û dem ya meye
+Welat çav li rê bendewarê meye
+
+Keçên nûgihan em dixwazin xebat
+Me canê ciwan dani rêka welat
+Dilên me ji pola gurçik bûne hesin
+Bo ala rengîn hûn werin em besin`
+  },
+  {
+    title: "Keçik Dîbûm Ser Banîka",
+    lang: "Kürtçe",
+    lyrics: `Keçik dîbûm ser banîka
+Xezal dîbûm ser banîka
+
+Enya gewher, enya zirav,
+Tuncikê enyê bin şewqê ra
+
+De bila bîra te were
+Ça ez û tu ser banîka
+Em dilîstin ser xanîka
+
+Derd û kulê me pir giran e
+Welatê me bin destan e
+
+Heta azadiyê em nebînin
+xwe nakin kincê bûk zavan e`
+  },
+  {
+    title: "Pore Hewala Mın Sore",
+    lang: "Kürtçe",
+    lyrics: `Porê dayîkamin sor e, Porê hevala min sor e
+Paşika guliya bi mor e, şûştina xelkê çi zor e
+Way Delîlahê naye wax Delîlahê naye
+Kevir e gemarêye hevalno rewî deng jê naye
+
+Porê dayîkamin sor e, Porê hevala min sor e
+Paşika guliya bi mor e, şûştina xelkê çi zor e
+Way delîla min birin wax hevala min birin
+Sedsala berjêr kirin dayiko rêheval birin
+
+Porê dayîkamin sor e, Porê hevala min sor e
+Paşika guliya bi mor e, şûştina xelkê çi zor e
+Porê te hine nakim, Porê xwe hine nakim
+Paşika guliya venakim şuştuna dayîkê ji bîr nakim
+
+Porê dayîkamin sor e, Porê hevala min sor e
+Paşika guliya bi mor e, şûştina xelkê çi zor e`
+  },
+  {
+    title: "Şu Tepe Pullu Tepe",
+    lang: "Türkçe",
+    lyrics: `Şu tepe pullu tepe (Nenni de yarim nenni)
+Su gelir serpe serpe (Eski de yarim hani)
+Dediler yar uyumuş (Nenni de yarim nenni)
+Uyardım öpe öpe (Eski de yarim hani)
+
+Altını bozdurayım (Nenni de yarim nenni)
+Gerdana dizdireyim (Eski de yarim hani)
+İpek mendil değilsen (Nenni de yarim nenni)
+Cebimde gezdireyim (Eski de yarim hani)
+
+Altındır alay değil (Nenni de yarim nenni)
+Gümüştür kalay değil (Eski de yarim hani)
+Kınamayın a dostlar (Nenni de yarim nenni)
+Sevdadır kolay değil (Eski de yarim hani)`
+  },
+  {
+    title: "Wey Nare",
+    lang: "Kürtçe",
+    lyrics: `Wa narê lê Narînê lê lê yarê lê narînê
+Narê bandikim tu li kuy e çima nayê wa narînê lê lê yarê
+Tenê me bê te nabe, sebram nayê lê narînê lê lê yarê
+
+Îroji malê derketim
+Bi pey şopa Narê ketim
+Kolan kolan ez geriyam
+Westiyam ji hal de ketim
+
+Min li derî da, ne li malê bû
+Ne li banî ne li xwarê bû
+Li bin siya darê bû`
+  },
+  {
+    title: "Beriye",
+    lang: "Kürtçe",
+    lyrics: `Beriye beriye
+Li ber çemê beriye
+Keça bedew a rind
+Ji nav gundê beriye
+
+Xortekî evîndar bû
+Ji keça rind re dil da
+Lê neqismet wan kir dûr
+Evîn man bê çare da
+
+Beriye beriye
+Çem diherike beriye
+Dil tijî derd û kulê
+Bêriya te bêriye
+
+Şev û roj ez te dibînim
+Di xewn û xeyala min
+Dema em ji hev ketine
+Tune bûye hêviya min`
+  },
+  {
+    title: "Kara Üzüm Habbesi",
+    lang: "Türkçe",
+    lyrics: `Kara üzüm habbesi
+Yüreğime dabbesi
+Ben yârimden ayrıldım
+Gözlerimde yabbesi
+
+Oy oy oy oy yandım
+Dertlere kandım
+Yârim elden gideli
+Bir başıma kaldım
+
+Kara üzüm salkımı
+Doldurmuşum talkımı
+Ben yârimden ayrıldım
+Yanar yanar alkımı
+
+Dağların kar tutmuyor
+Bağların yar tutmuyor
+Ayrılık bu ayrılık
+Kimseyi karar tutmuyor`
+  },
+  {
+    title: "Diyarbekir Malamıne",
+    lang: "Karma",
+    lyrics: `Xwezî li me vegeryana lê lê
+Ew rojên me yên berê canê
+Min digo tirsim te ne bînim lê lê
+Te digo xwedê mezin e canê
+
+Min digo tirsim te ne bînim lê lê
+Te digo sağbim ya te me canê
+Bimrim ji axê re me canê
+
+Diyarbekır mala min e
+Diyarbekır cîhê min e
+Cihê bav û kalê min e
+Ew meskena paytextê min e
+
+Hatî nava gundê min
+Şîn bû dor û warê min
+Kêf xweş bûm bi hatina te lê canê
+Çima tu nayê mala min
+
+Dêra Sorê mezin e lê lê lê lê
+Sebra mala min ê
+Dêra Sorê mezin e
+Dest hine û bazin e
+Par qîz bû Îsal jin e
+Lê lê lê lê
+
+Par qîz bû Îsal jin e
+Berxê, sebra mala min ê
+
+Oooooooo
+
+Yar hay nînnay nînnay
+Yar hay nînnay nînnay
+Yar hay nînnay nînnay
+Yar hay nînnay nînnay
+
+Te por sorê lê lê
+Hine dayê way way
+
+Li bajar û gunda
+Qala min û te ye
+Eşqa dila zore, wele bilo mebe
+Ez zanim bext reşê
+Şansêm lê tune
+Hey gîdî dinyayê, dosta yekîdin ê`
+  },
+  {
+    title: "Bugün Dost Yaralanmış",
+    lang: "Türkçe",
+    lyrics: `Bugün dost yaralanmış
+Yine gönlüm hoş değil
+Her yanı parelenmiş
+Yine gönlüm hoş değil
+
+Dost hasret'i zor imiş
+Her dem ahu zar imiş
+Dert adamı yer imiş
+Yine gönlüm hoş değil
+
+Akarsuyum yansam da
+Kül olup savrulsam da
+Bazı bazı gülsem de
+Yine gönlüm hoş değil`
+  },
+  {
+    title: "Seher Nazlı Yare",
+    lang: "Türkçe",
+    lyrics: `Seher yeli nazlı yare
+Bildir beni bildir beni
+Düşmüşem elden ayağa
+Kaldır beni kaldır beni
+
+Ok vurup sinem dağlatma
+Didemde nemi çağlatma
+Gel yeter beni ağlatma
+Güldür beni güldür beni
+
+Söyle güzeller şahına
+Yüz süreyim dergahına
+Zehir olam kadehine
+Doldur beni doldur beni
+
+Kul Ahmed'im gönül versem
+Dalında gülünü dersem
+Senden başka yar seversem
+Öldür beni öldür beni`
+  },
+  {
+    title: "Haydar Haydar",
+    lang: "Türkçe",
+    lyrics: `On dört bin yıl gezdik pervanelikte
+Sıdkı ismin duydum divanelikte
+İçtim şerbetini mestanelikte
+Kırkların ceminde dara düş oldum
+
+Kırkların ceminde
+Haydar Haydar Haydar
+Haydar Haydar Haydar
+Haydar Haydar Haydar
+dara düş oldum
+
+Güruh-i Naci'ye özümü kattım
+Adem sıfatından çok geldim gittim
+Bülbül oldum firdevs bağında öttüm
+Bir zaman gül için zara düş oldum
+
+Bir zaman gül için
+Haydar Haydar Haydar
+Haydar Haydar Haydar
+Haydar Haydar Haydar
+zara düş oldum`
+  },
+  {
+    title: "Mevlut",
+    lang: "Kürtçe",
+    lyrics: `Em kirine ummeta xeyr-ul beşer
+Tabi'ê wî muqtedayê namuwer
+
+Ew xwedayê malikê mulkê 'ezîm
+Daye me mîrasa Qur'ana kerîm
+
+Dînê me kir kamil û ni'met temam
+Yanî da me Ehmed û dar-us selam
+
+Ew xwedayê bê nezîr û zulcelal
+Bê mîsal û bê heval û bê zewal
+
+Raziqê bê dest û pa û mar û mûr
+'Alîmê sirra ne gotî der sudûr
+
+Karî sazê bende û sultanê can
+Rahîm û rehman letîf û mihrîban
+
+Asîmanê bê sitûn Wî kir bedîd
+Suretê bê xal û xet wî aferîd
+
+Hêvîdarin em ji te şahê kerîm
+Îhdîna ya Reb sîrat-el musteqîm
+
+Nê ji me sûc û xeta tîn û sitem
+Lê ji te îhsan û xufran û kerem
+
+Ya rab îmanê di xwazin em mûdam
+Jêrê alaya muhemmed wes-selam`
+  },
+  {
+    title: "Dersim Zilan",
+    lang: "Türkçe",
+    lyrics: `Dersim agri zilan hani
+katlet diler cani cani
+Birer birer hesabini soranarek savasiriz
+Birer birer hesabini soranarek savasiriz
+
+Biz bu yola bas koymusuz
+Les bir yana
+Bas bir yana
+Biz Mazluma söz vermisiz
+Bu yolda dönüs yok bize
+Biz Mazluma söz vermisiz
+Bu yolda dönüs yok bize
+
+Biz bu yola bas koymusuz
+Les bir yana
+Bas bir yana
+Biz apoya söz vermisiz
+Bu yolda dönüs yok bize
+Biz apoya söz vermisiz
+Bu yolda dönüs yok bize
+
+Sehit verdik onbinlerce
+Biz söz verdik sehitlere
+Kizil bayragi göklere
+Dikenerek savasiriz
+Kizil bayragi göklere
+Dikenerek savasiriz
+
+Biz bu yola bas koymusuz
+Les bir yana
+Bas bir yana
+Biz hayriye söz vermisiz
+Bu yolda dönüs yok bize
+Biz hayriye söz vermisiz
+Bu yolda dönüs yok bize
+
+Biz bu yola bas koymusuz
+Les bir yana
+Bas bir yana
+Biz Apoya söz vermisiz
+Bu yolda dönüs yok bize
+Biz Apoya söz vermisiz
+Bu yolda dönüs yok bize
+
+Diyarbikir meydanina
+Mazlum Doganin püstünü
+Yaninada Kemal Piri
+Dikenerek savasiriz
+Yaninada Kemal Piri
+Dikenerek savasiriz
+
+Biz bu yola bas koymusuz
+Bes bir yana
+Bas bir yana
+Biz apoya söz vermisiz
+Bu yolda dönüs yok bize
+Biz apoya söz vermisiz
+Bu yolda dönüs yok bize`
+  },
+  {
+    title: "Kime Kin Ettinde",
+    lang: "Türkçe",
+    lyrics: `Kime kin ettin de giydin alları?
+Yakın iken ırak ettin yolları
+Mihnetine yetirdiğim gülleri
+Varıp gittin bir soysuza yoldurdun
+Varıp gittin bir soysuza yoldurdun
+
+Mihnetine yetirdiğim gülleri
+Varıp gittin bir soysuza yoldurdun
+Varıp gittin bir soysuza yoldurdun
+
+Sen beni sevseydin arar bulurdun
+Zülfün telerinde bağlar dururdun
+Madem ayrılmakmış senin muradın
+Niye beni ateşine yandırdın?
+N'için beni ateşine yandırdın?
+
+Madem ayrılıkmış senin muradın
+Niye beni ateşine yandırdın?
+Niye beni ateşine yandırdın?
+
+Sen seni topla da kuşağın kuşan
+Ayrılır mı senin sevdana düşen?
+Sefa geldin diye sarıp sarmaşan
+Niye benden muhabbetin kaldırdın?
+N'için benden muhabbetin kaldırdın?
+
+Sefa geldin diye sarıp sarmaşan
+Niye benden muhabbetin kaldırdın?
+Niye benden muhabbetin kaldırdın?
+
+Hicrani'yem der ki bakın hâlına
+Dağlar dayanmıyor ah-u zarına
+Elim ermez oldu kisp-i karıma
+Çünkü gül yüzlümü elden aldırdım
+Çünkü gül yüzlümü elden aldırdım
+
+Elim ermez oldu kisp-i karıma
+Çünkü gül yüzlümü elden aldırdım
+Çünkü gül yüzlümü elden aldırdım`
+  }
+];
+
+let currentLang = 'all';
+let currentIndex = -1;
+let isMobile = window.innerWidth < 768;
+
+function renderList(filtered) {
+  const list = document.getElementById('songList');
+  const count = document.getElementById('songCount');
+  count.textContent = `${filtered.length} şarkı`;
+  
+  if (filtered.length === 0) {
+    list.innerHTML = `<div class="empty"><div class="empty-icon">🎵</div>Şarkı bulunamadı</div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map((s, i) => {
+    const origIdx = songs.indexOf(s);
+    return `<div class="song-item ${origIdx === currentIndex ? 'active' : ''}" onclick="openSong(${origIdx})">
+      <span class="song-num">${i + 1}</span>
+      <div class="song-info">
+        <div class="song-title">${s.title}</div>
+        <div class="song-lang">${s.lang}</div>
+      </div>
+      <span class="song-arrow">›</span>
+    </div>`;
+  }).join('');
+}
+
+function filterSongs() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  let filtered = songs;
+  if (currentLang !== 'all') filtered = filtered.filter(s => s.lang === currentLang);
+  if (q) filtered = filtered.filter(s => s.title.toLowerCase().includes(q));
+  renderList(filtered);
+}
+
+function filterLang(lang, btn) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  filterSongs();
+}
+
+function openSong(idx) {
+  currentIndex = idx;
+  const s = songs[idx];
+  document.getElementById('panelTitle').textContent = s.title;
+  document.getElementById('panelLang').textContent = s.lang;
+  document.getElementById('lyricsText').textContent = s.lyrics;
+  
+  isMobile = window.innerWidth < 768;
+  if (isMobile) {
+    document.getElementById('lyricsPanel').classList.add('open');
+    document.getElementById('overlay').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.getElementById('welcomeMsg').style.display = 'none';
+    document.getElementById('lyricsPanel').style.display = 'flex';
+    // scroll to top
+    document.querySelector('.lyrics-body').scrollTop = 0;
+  }
+  filterSongs();
+}
+
+function closePanel() {
+  document.getElementById('lyricsPanel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+window.addEventListener('resize', () => {
+  isMobile = window.innerWidth < 768;
+});
+
+// init
+renderList(songs);
+</script>
+</body>
+</html>
